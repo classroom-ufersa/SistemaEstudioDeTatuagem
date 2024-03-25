@@ -2,4 +2,4 @@ Artur Gama	artur@email.com
 Caio Souza	caio@email.com
 Daniel Lima	daniel@email.com
 Gabriel Silva	biel@email.com
-Wesley Souza	email.com
+Wesley Souza	wesley@email.com
