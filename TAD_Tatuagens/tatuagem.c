@@ -3,8 +3,8 @@
 struct tatuagens
 {
     int identificacao;
-    char estilo[50];
-    char cores[50];
+    char estilo[100];
+    char cores[100];
     float preco;
 };
 
