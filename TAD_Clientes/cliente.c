@@ -123,9 +123,10 @@ void removeCliente(struct cliente *clientes, int *qtdClientes, int ind)
     {
         strcpy(clientes[i].nome, clientes[i + 1].nome);
         strcpy(clientes[i].email, clientes[i + 1].email);
-        clientes[i].lista_de_tatuagens = clientes[i + 1].lista_de_tatuagens;
     }
     (*qtdClientes)--;
+
+    clientes[ind].lista_de_tatuagens == NULL;
 
     FILE *arquivo;
     arquivo = fopen("../Dados/DadosClientes.txt", "w");
