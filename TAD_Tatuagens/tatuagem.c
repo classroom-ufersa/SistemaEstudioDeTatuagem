@@ -20,7 +20,7 @@ Tatuagens *contaTattoo(int *qtd)
     char linha[101];
 
     FILE *arquivo;
-    arquivo = fopen("DadosTattoos.txt", "r");
+    arquivo = fopen("../Dados/DadosTattoos.txt", "r");
 
     while (fscanf(arquivo, "%[^\n]\n", linha) != EOF)
     {
@@ -63,7 +63,7 @@ void coletaTattoo(Tatuagens *tattoo, int qtdC)
     int i = 0;
 
     FILE *dados;
-    dados = fopen("DadosTattoos.txt", "r");
+    dados = fopen("../Dados/DadosTattoos.txt", "r");
 
     while (i < qtdC)
     {
@@ -89,7 +89,7 @@ void inserirTatuagem(int *numdeTatuagem)
     FILE *arquivo;
     Tatuagens aux;
 
-    arquivo = fopen("DadosTattoos.txt", "a");
+    arquivo = fopen("../Dados/DadosTattoos.txt", "a");
     if (arquivo == NULL)
     {
         printf("Erro ao abrir o arquivo!\n");
