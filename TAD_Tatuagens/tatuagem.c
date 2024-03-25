@@ -3,8 +3,8 @@
 struct tatuagens
 {
     int identificacao;
-    char estilo[100];
-    char cores[100];
+    char estilo[150];
+    char cores[150];
     float preco;
 };
 
@@ -97,9 +97,9 @@ void inserirTatuagem(int *numdeTatuagem)
     }
     getchar();
     printf("Digite o estilo: \n");
-    scanf(" %s", aux.estilo);
+    scanf(" %[^\n]", aux.estilo);
     printf("Digite a cor: \n");
-    scanf(" %s", aux.cores);
+    scanf(" %[^\n]", aux.cores);
     printf("Digite o preco: \n");
     scanf(" %f", &aux.preco);
     getchar();
