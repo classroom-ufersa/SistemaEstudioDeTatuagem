@@ -1,5 +1,2 @@
 1	Broken Glass	135.00	Amarelo
-2	Old School	150.00	Verde
-3	Realism	100.00	Azul
-4	Geometric	50.00	Vermelho
-5	Old School	150.00	Verde
+3	Geometric	50.00	Vermelho

@@ -1,3 +1,5 @@
+#ifndef TATUAGEM_H 
+#define TATUAGEM_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,3 +33,10 @@ void remove_elemento(No **primeiro, int identificacao);
 
 // Função para imprimir uma lista encadeada
 void lst_Imprime(No* primeiro);
+
+// Função de remover
+void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, int id);
+
+// Função de liberação.
+void liberaTatuagens(Tatuagens *tattoos);
+#endif

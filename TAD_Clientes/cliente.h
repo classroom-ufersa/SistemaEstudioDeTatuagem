@@ -32,3 +32,4 @@ void removeCliente(struct cliente *clientes, int *qtdClientes, int ind);
 
 // Função que mostra o menu para edições do dado de um cliente
 void menuEdit(int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *qtdC);
+

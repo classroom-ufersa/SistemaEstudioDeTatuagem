@@ -50,6 +50,9 @@ int main(void)
             break;
         case 4:
     // Faltando
+    printf("Digite o ID da tatuagem que deseja remover: ");
+    scanf("%d", &id);
+    removeTatuagemPorId(tattoos, &qtdTattoos, id);
             break;
         case 5:
             mostrarDados(Clientes, qtdClientes);

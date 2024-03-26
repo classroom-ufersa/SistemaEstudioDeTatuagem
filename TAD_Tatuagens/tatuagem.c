@@ -144,3 +144,55 @@ void lst_Imprime(No *primeiro)
         printf("-----------------------\n");
     }
 }
+
+
+// Implementação. 
+void liberaTatuagens(Tatuagens *tattoos) {
+    free(tattoos);
+}
+
+
+
+void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, int id)
+{
+    int i;
+    int indice_da_tatuagem_removida = -1; // por enquanto ela não foi encontrada.
+    FILE *arquivo;
+    for (i = 0; i < *qtdTatuagens; i++)
+    {
+        if (tatuagens[i].identificacao == id)
+        {
+            indice_da_tatuagem_removida = i; // Caso ache
+            break;
+        }
+    }
+    // se não achar.
+    if (indice_da_tatuagem_removida == -1)
+    {
+        printf("Nada encontrado sobre a tatuagem.\n");
+        return;
+    }
+    // Posição.
+    for (i = indice_da_tatuagem_removida; i < *qtdTatuagens - 1; i++)
+    {
+        tatuagens[i] = tatuagens[i + 1]; // Deslocar.
+    }
+    (*qtdTatuagens)--; 
+
+    
+    arquivo = fopen("../Dados/DadosTattoos.txt", "w");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo.\n");
+        exit(1);
+    }
+  // Escrever no arquivo.
+    for (i = 0; i < *qtdTatuagens; i++)
+    {
+        fprintf(arquivo, "%d\t%s\t%.2f\t%s\n", tatuagens[i].identificacao, tatuagens[i].estilo, tatuagens[i].preco, tatuagens[i].cores);
+    }
+
+    fclose(arquivo);
+
+    printf("==== + Tatuagem deletada com Sucesso + ====\n");
+}
