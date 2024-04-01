@@ -25,11 +25,16 @@ void ordenaNome(struct cliente *Cliente, int qtdClientes);
 void escreverOrd(struct cliente *clientes, int qtdClientes);
 
 // Função para adicionar um cliente
-void adicionaCliente(int *q);
+void adicionaCliente(int *q, int *lista);
 
 // Função para remover um cliente do vetor e do arquivo de texto
-void removeCliente(struct cliente *clientes, int *qtdClientes, int ind);
+void removeCliente(struct leitura *aux, struct cliente *clientes, int *qtdClientes, int ind, int *qtdLeitura);
 
 // Função que mostra o menu para edições do dado de um cliente
-void menuEdit(int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *qtdC);
+void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *qtdC);
 
+// Função que coleta os dados das tatuagens dos cliente e chama a função "Insere_elementos_por_id" para adicioná-los
+void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int Qtdc, int Qtdt);
+
+// Função que reescreve as tatuagens no TXT
+void escreveTattoos(Tatuagens *tattoos, int qtdT);

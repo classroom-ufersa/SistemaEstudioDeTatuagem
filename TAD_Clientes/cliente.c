@@ -5,7 +5,7 @@
 
 struct cliente
 {
-    char nome[200];
+    char nome[250];
     char email[250];
     No *lista_de_tatuagens;
 };
@@ -14,9 +14,15 @@ struct cliente *contaClientes(int *qtd)
 {
     int tamanho = 0;
     char linha[101];
-    FILE *arquivo;
 
+    FILE *arquivo;
     arquivo = fopen("../Dados/DadosClientes.txt", "r");
+
+    if (arquivo == NULL)
+    {
+        printf("Problema na abertura do arquivo.\n");
+        exit(1);
+    }
 
     while (fscanf(arquivo, "%[^\n]\n", linha) != EOF)
     {
@@ -28,7 +34,6 @@ struct cliente *contaClientes(int *qtd)
     struct cliente *clientes = malloc(tamanho * sizeof(struct cliente));
 
     *qtd = tamanho;
-
     return clientes;
 }
 
@@ -49,6 +54,12 @@ void coletaClientes(struct cliente *clientes, int qtdC)
     FILE *dados;
     dados = fopen("../Dados/DadosClientes.txt", "r");
 
+    if (dados == NULL)
+    {
+        printf("Problema na abertura do arquivo!\n");
+        return;
+    }
+
     while (i < qtdC)
     {
         fscanf(dados, "%[^\t]\t%[^\n]\n", clientes[i].nome, clientes[i].email);
@@ -61,12 +72,13 @@ void coletaClientes(struct cliente *clientes, int qtdC)
 void escreverOrd(struct cliente *clientes, int qtdClientes)
 {
     int i;
+
     FILE *arquivo;
     arquivo = fopen("../Dados/DadosClientes.txt", "w");
 
     if (arquivo == NULL)
     {
-        printf("Erro ao abrir o arquivo para escrita.\n");
+        printf("Problema ao abrir o arquivo\n");
         return;
     }
 
@@ -81,21 +93,24 @@ void escreverOrd(struct cliente *clientes, int qtdClientes)
 void mostrarDados(struct cliente *Cliente, int qtdClientes)
 {
     int j;
+
     for (j = 0; j < qtdClientes; j++)
     {
         printf("| %d |Nome: %s, E-mail: %s\n", j, Cliente[j].nome, Cliente[j].email);
     }
 }
 
-void adicionaCliente(int *q)
+void adicionaCliente(int *q, int *lista)
 {
     // Obrigatoriamente, o primeiro digito do nome deve ser maiusculo, implementar mais tarde
     struct cliente Aux;
+
     FILE *arquivo;
     arquivo = fopen("../Dados/DadosClientes.txt", "a");
+
     if (arquivo == NULL)
     {
-        printf("Erro ao abrir o arquivo para escrita.\n");
+        printf("Problema ao abrir o arquivo\n");
         return;
     }
 
@@ -108,24 +123,39 @@ void adicionaCliente(int *q)
     fclose(arquivo);
 
     (*q)++;
+    FILE *arquivob;
+
+    arquivob = fopen("../Dados/ListaTatuagens.txt", "a");
+    if (arquivob == NULL)
+    {
+        printf("Problema ao abrir o arquivo\n");
+        return;
+    }
+
+    fprintf(arquivob, "%s\t%d\n", Aux.nome, 0);
+    fclose(arquivob);
+    (*lista)++;
 }
 
-void removeCliente(struct cliente *clientes, int *qtdClientes, int ind)
+void removeCliente(struct leitura *aux, struct cliente *clientes, int *qtdClientes, int ind, int *qtdLeitura)
 {
     int i;
+
     if (ind < 0 || ind >= *qtdClientes)
     {
         printf("Cliente inexistente.\n");
         return;
     }
 
+    removeTatuagensRegistradas(aux, qtdLeitura, clientes[ind].nome);
+
     for (i = ind; i < *qtdClientes - 1; i++)
     {
         strcpy(clientes[i].nome, clientes[i + 1].nome);
         strcpy(clientes[i].email, clientes[i + 1].email);
     }
-    (*qtdClientes)--;
 
+    (*qtdClientes)--;
     clientes[ind].lista_de_tatuagens == NULL;
 
     FILE *arquivo;
@@ -133,7 +163,7 @@ void removeCliente(struct cliente *clientes, int *qtdClientes, int ind)
 
     if (arquivo == NULL)
     {
-        printf("Erro ao abrir o arquivo.\n");
+        printf("Problema na abertura do arquivo.\n");
         return;
     }
 
@@ -147,10 +177,10 @@ void removeCliente(struct cliente *clientes, int *qtdClientes, int ind)
     printf("!!!! O cliente foi deletado !!!!\n");
 }
 
-void menuEdit(int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *qtdC)
+void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *qtdC)
 {
     int op, opb, ida, idb;
-
+    getchar();
     printf("-_-_ AREA DE EDICAO _-_-\n");
     printf("1 - Editar nome do cliente\n");
     printf("2 - Editar email do cliente\n");
@@ -189,11 +219,13 @@ void menuEdit(int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *q
 
             if (opb == 1)
             {
-                imprime_dados(Tedit, *qtdT);
+                imprimeDadosTatuagens(Tedit, *qtdT);
                 printf("Digite o ID da tatuagem que deseja inserir na lista do cliente: \n");
                 scanf(" %d", &ida);
-                Cedit[id].lista_de_tatuagens = NULL;
-                Cedit[id].lista_de_tatuagens = Insere_elementos(Cedit[id].lista_de_tatuagens, ida, Tedit);
+
+                verificaInsere(aux, ida, Cedit[id].nome);
+                Cedit[id].lista_de_tatuagens = carregaTatuagensNaLista(Cedit[id].lista_de_tatuagens, ida, Tedit, *qtdT);
+
                 opb = 3;
             }
 
@@ -205,10 +237,13 @@ void menuEdit(int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *q
                     opb = 3;
                     return;
                 }
+
                 lst_Imprime(Cedit[id].lista_de_tatuagens);
                 printf("Digite o ID da tatuagem que deseja remover: \n");
                 scanf(" %d", &idb);
-                remove_elemento(&Cedit[id].lista_de_tatuagens, idb);
+
+                removeTatuagemDaLista(&Cedit[id].lista_de_tatuagens, idb, aux, id, *qtdC, Cedit[id].nome);
+                
                 opb = 3;
             }
 
@@ -224,4 +259,42 @@ void menuEdit(int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *q
         printf("Opcao invalida!\n");
         break;
     }
+}
+
+void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int Qtdc, int Qtdt)
+{
+    int i, j, qtdl;
+    char nome[200];
+
+    FILE *arquivo;
+    arquivo = fopen("../Dados/ListaTatuagens.txt", "r");
+    for (j = 0; j < Qtdc; j++)
+    {
+        fscanf(arquivo, "%[^\t]\t%d\t", nome, &qtdl);
+        for (i = 0; i < Qtdc; i++)
+        {
+            if (strcmp(cliente[i].nome, nome) == 0)
+            {
+                No *primeiro = NULL;
+                int j;
+
+                for (j = 0; j < qtdl; j++)
+                {
+                    int id;
+                    if (fscanf(arquivo, "%d", &id) == 1)
+                    {
+                        primeiro = carregaTatuagensNaLista(primeiro, id, tattoo, Qtdt);
+                    }
+                    else
+                    {
+                        printf("Problema de leitura de tatuagem no cliente %s\n", nome);
+                        break;
+                    }
+                }
+                cliente[i].lista_de_tatuagens = primeiro;
+            }
+        }
+        fscanf(arquivo, "\n");
+    }
+    fclose(arquivo);
 }

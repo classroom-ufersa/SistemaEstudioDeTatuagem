@@ -14,7 +14,14 @@ struct no
     No *prox;
 };
 
-Tatuagens *contaTattoo(int *qtd)
+struct leitura
+{
+    char cliente[250];
+    int numerodeT;
+    int idsT[10];
+};
+
+Tatuagens *contaEalocaTatuagens(int *qtd)
 {
     int tamanho = 0;
     char linha[101];
@@ -32,7 +39,6 @@ Tatuagens *contaTattoo(int *qtd)
     Tatuagens *tattoos = malloc(tamanho * sizeof(Tatuagens));
 
     *qtd = tamanho;
-
     return tattoos;
 }
 
@@ -44,8 +50,10 @@ int verifica_vazio(No *l)
         return 0;
 }
 
-No *Insere_elementos(No *primeiro_no, int id, Tatuagens *aux)
+No *insereElementosNaLista(No *primeiro_no, int id, Tatuagens *aux)
 {
+    int i;
+
     No *novo = (No *)malloc(sizeof(No));
 
     strcpy(novo->tatuagem.cores, aux[id].cores);
@@ -58,7 +66,7 @@ No *Insere_elementos(No *primeiro_no, int id, Tatuagens *aux)
     return novo;
 }
 
-void coletaTattoo(Tatuagens *tattoo, int qtdC)
+void coletaDadosTatuagens(Tatuagens *tattoo, int qtdC)
 {
     int i = 0;
 
@@ -74,27 +82,44 @@ void coletaTattoo(Tatuagens *tattoo, int qtdC)
     fclose(dados);
 }
 
-void imprime_dados(Tatuagens *tattoos, int qtd)
+void escreveTattoos(Tatuagens *tattoos, int qtdT)
 {
+    int i;
 
+    FILE *arquivo;
+    arquivo = fopen("../Dados/DadosTattoos.txt", "w");
+
+    for (i = 0; i < qtdT; i++)
+    {
+        fprintf(arquivo, "%d\t%s\t%.2f\t%s\n", tattoos[i].identificacao, tattoos[i].estilo, tattoos[i].preco, tattoos[i].cores);
+    }
+
+    fclose(arquivo);
+}
+
+void imprimeDadosTatuagens(Tatuagens *tattoos, int qtd)
+{
     int j;
+
     for (j = 0; j < qtd; j++)
     {
-        printf("| %d | Estilo: %s, Preco: %.2f, Cores: %s\n", j, tattoos[j].estilo, tattoos[j].preco, tattoos[j].cores);
+        printf("| %d | Estilo: %s, Preco: %.2f, Cores: %s\n", tattoos[j].identificacao, tattoos[j].estilo, tattoos[j].preco, tattoos[j].cores);
     }
 }
 
-void inserirTatuagem(int *numdeTatuagem)
+void insereNovaTatuagemNoArquivo(int *numdeTatuagem)
 {
-    FILE *arquivo;
     Tatuagens aux;
 
+    FILE *arquivo;
     arquivo = fopen("../Dados/DadosTattoos.txt", "a");
+
     if (arquivo == NULL)
     {
-        printf("Erro ao abrir o arquivo!\n");
+        printf("Problema na abertura do arquivo!\n");
         exit(1);
     }
+
     getchar();
     printf("Digite o estilo: \n");
     scanf(" %[^\n]", aux.estilo);
@@ -111,33 +136,130 @@ void inserirTatuagem(int *numdeTatuagem)
     fclose(arquivo);
 }
 
-void remove_elemento(No **primeiro, int identificacao) {
+void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, struct leitura *aux, int id, int qtdL)
+{
+    int i, j;
+
+    int posicao_remover = -1;
+    for (i = 0; i < *qtdTatuagens; i++)
+    {
+        if (tatuagens[i].identificacao == id)
+        {
+            posicao_remover = i;
+            break;
+        }
+    }
+
+    if (posicao_remover == -1)
+    {
+        printf("ID %d nao encontrada.\n", id);
+        return;
+    }
+
+    for (i = posicao_remover; i < *qtdTatuagens - 1; i++)
+    {
+        tatuagens[i] = tatuagens[i + 1];
+    }
+    (*qtdTatuagens)--;
+
+    for (i = 0; i < qtdL; i++)
+    {
+        for (j = 0; j < aux[i].numerodeT; j++)
+        {
+            if (aux[i].idsT[j] == id)
+            {
+                aux[i].idsT[j] = 0;
+                aux[i].numerodeT--;
+                break;
+            }
+        }
+    }
+
+    for (i = 0; i < *qtdTatuagens; i++)
+    {
+        if (tatuagens[i].identificacao > id)
+        {
+            tatuagens[i].identificacao--;
+        }
+    }
+}
+
+void removeTatuagemDaLista(No **primeiro, int identificacao, struct leitura *aux, int idc, int qtdC, const char *nome)
+{
+    int i, j;
+
     No *atual = *primeiro;
     No *anterior = NULL;
+    for (j = 0; j < qtdC; j++)
+    {
+        for (i = 0; i < 10; i++)
+        {
+            if (strcmp(aux[j].cliente, nome) == 0)
+            {
+                if (aux[j].idsT[i] == identificacao)
+                {
+                    aux[j].idsT[i] = 0;
+                    aux[j].numerodeT = aux[j].numerodeT - 1;
+                    printf("%d", aux[j].numerodeT);
+                }
+            }
+        }
+    }
 
-    while (atual != NULL && atual->tatuagem.identificacao != identificacao) {
+    while (atual != NULL && atual->tatuagem.identificacao != identificacao)
+    {
         anterior = atual;
         atual = atual->prox;
     }
 
-    if (atual == NULL) {
-        printf("Elemento com identificacao %d nao encontrado na lista.\n", identificacao);
+    if (atual == NULL)
+    {
+        printf("Id: %d nao encontrado na lista.\n", identificacao);
         return;
     }
 
-    if (anterior == NULL) {
+    if (anterior == NULL)
+    {
         *primeiro = atual->prox;
-    } else {
+    }
+    else
+    {
         anterior->prox = atual->prox;
     }
 
     free(atual);
 }
 
+void removeTatuagensRegistradas(struct leitura *aux, int *qtdLeitura, char *nomeCliente)
+{
+    int i, j, k;
+
+    for (i = 0; i < *qtdLeitura; i++)
+    {
+        if (strcmp(aux[i].cliente, nomeCliente) == 0)
+        {
+
+            for (j = i; j < *qtdLeitura - 1; j++)
+            {
+                strcpy(aux[j].cliente, aux[j + 1].cliente);
+                aux[j].numerodeT = aux[j + 1].numerodeT;
+
+                for (k = 0; k < aux[j].numerodeT; k++)
+                {
+                    aux[j].idsT[k] = aux[j + 1].idsT[k];
+                }
+            }
+
+            (*qtdLeitura)--;
+            break;
+        }
+    }
+}
 
 void lst_Imprime(No *primeiro)
 {
     No *aux;
+
     for (aux = primeiro; aux != NULL; aux = aux->prox)
     {
         printf("ID: %d \n Estilo: %s \n Preco: %.2f \n Cor: %s \n", aux->tatuagem.identificacao, aux->tatuagem.estilo, aux->tatuagem.preco, aux->tatuagem.cores);
@@ -145,54 +267,145 @@ void lst_Imprime(No *primeiro)
     }
 }
 
-
-// Implementação. 
-void liberaTatuagens(Tatuagens *tattoos) {
-    free(tattoos);
-}
-
-
-
-void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, int id)
+No *carregaTatuagensNaLista(No *primeiro_no, int id, Tatuagens *tattoo, int qtdTattoos)
 {
     int i;
-    int indice_da_tatuagem_removida = -1; // por enquanto ela não foi encontrada.
-    FILE *arquivo;
-    for (i = 0; i < *qtdTatuagens; i++)
+
+    for (i = 0; i < qtdTattoos; i++)
     {
-        if (tatuagens[i].identificacao == id)
+        if (tattoo[i].identificacao == id)
         {
-            indice_da_tatuagem_removida = i; // Caso ache
+            No *novo = (No *)malloc(sizeof(No));
+
+            if (novo == NULL)
+            {
+                printf("Falha na alocacao.\n");
+                return primeiro_no;
+            }
+
+            strcpy(novo->tatuagem.cores, tattoo[i].cores);
+            strcpy(novo->tatuagem.estilo, tattoo[i].estilo);
+
+            novo->tatuagem.identificacao = tattoo[i].identificacao;
+            novo->tatuagem.preco = tattoo[i].preco;
+            novo->prox = primeiro_no;
+
+            return novo;
+        }
+    }
+    printf("ID da tatuagem nao encontrado.\n");
+
+    return primeiro_no;
+}
+
+struct leitura *alocaLista(int *qtdL, int qtdC)
+{
+    int i, j;
+    int tamanho = qtdC;
+    struct leitura *ler = malloc(tamanho * sizeof(struct leitura));
+    if (ler == NULL)
+    {
+        printf("Problema na alocacao\n");
+        exit(1);
+    }
+
+    for (i = 0; i < tamanho; i++)
+    {
+        ler[i].numerodeT = 0;
+        for (j = 0; j < 10; j++)
+        {
+            ler[i].idsT[j] = 0;
+        }
+    }
+
+    *qtdL = tamanho;
+
+    return ler;
+}
+
+void lerLista(struct leitura *lendo, int qtdL)
+{
+    int i, j;
+
+    FILE *dados;
+    dados = fopen("../Dados/ListaTatuagens.txt", "r");
+    if (dados == NULL)
+    {
+        printf("Problema na abertura do arquivo!\n");
+        exit(1);
+    }
+
+    for (i = 0; i < qtdL; i++)
+    {
+        fscanf(dados, "%[^\t]\t%d\t", lendo[i].cliente, &lendo[i].numerodeT);
+        for (j = 0; j < lendo[i].numerodeT; j++)
+        {
+            fscanf(dados, "%d ", &lendo[i].idsT[j]);
+        }
+    }
+
+    fclose(dados);
+}
+
+void reescreveLista(struct leitura *escreve, int qtdL)
+{
+    int i, j;
+    FILE *arquivo;
+    arquivo = fopen("../Dados/ListaTatuagens.txt", "w");
+    if (arquivo == NULL)
+    {
+        printf("Problema na abertura do arquivo!\n");
+        return;
+    }
+    for (i = 0; i < qtdL; i++)
+    {
+        fprintf(arquivo, "%s\t%d\t", escreve[i].cliente, escreve[i].numerodeT);
+        for (j = 0; j < escreve[i].numerodeT; j++)
+        {
+            fprintf(arquivo, "%d ", escreve[i].idsT[j]);
+        }
+        fprintf(arquivo, "\n");
+    }
+    fclose(arquivo);
+}
+
+void verificaInsere(struct leitura *grava, int idT, char *nome)
+{
+    int i, j;
+    int encontrado = 0;
+
+    for (i = 0; i < 10; i++)
+    {
+        if (strcmp(grava[i].cliente, nome) == 0)
+        {
+            encontrado = 1;
             break;
         }
     }
-    // se não achar.
-    if (indice_da_tatuagem_removida == -1)
+
+    if (!encontrado)
     {
-        printf("Nada encontrado sobre a tatuagem.\n");
+        printf("Cliente nao encontrado.\n");
         return;
     }
-    // Posição.
-    for (i = indice_da_tatuagem_removida; i < *qtdTatuagens - 1; i++)
-    {
-        tatuagens[i] = tatuagens[i + 1]; // Deslocar.
-    }
-    (*qtdTatuagens)--; 
 
-    
-    arquivo = fopen("../Dados/DadosTattoos.txt", "w");
-    if (arquivo == NULL)
+    if (grava[i].numerodeT == 10)
     {
-        printf("Erro ao abrir o arquivo.\n");
-        exit(1);
-    }
-  // Escrever no arquivo.
-    for (i = 0; i < *qtdTatuagens; i++)
-    {
-        fprintf(arquivo, "%d\t%s\t%.2f\t%s\n", tatuagens[i].identificacao, tatuagens[i].estilo, tatuagens[i].preco, tatuagens[i].cores);
+        printf("O cliente %s nao tem mais espaço para tatuagens!\n", nome);
+        return;
     }
 
-    fclose(arquivo);
+    for (j = 0; j < 10; j++)
+    {
+        if (grava[i].idsT[j] == 0)
+        {
 
-    printf("==== + Tatuagem deletada com Sucesso + ====\n");
+            strcpy(grava[i].cliente, nome);
+            grava[i].idsT[j] = idT;
+            grava[i].numerodeT++;
+
+            printf("Tatuagem adicionada para o cliente %s.\n", nome);
+            break;
+        }
+    }
 }
