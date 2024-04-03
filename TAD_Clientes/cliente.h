@@ -36,5 +36,11 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
 // Função que coleta os dados das tatuagens dos cliente e chama a função "Insere_elementos_por_id" para adicioná-los
 void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int Qtdc, int Qtdt);
 
-// Função que reescreve as tatuagens no TXT
+// Função que reescreve as tatuagens no TXT.
 void escreveTattoos(Tatuagens *tattoos, int qtdT);
+
+// Função para verificação no emaill.
+int validaEmail(char* email);
+
+// Função de verificação do nome.
+int validaNome(char* nome);

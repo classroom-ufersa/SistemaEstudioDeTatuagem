@@ -7,7 +7,6 @@ int main(void)
     int qtdTattoos = 0;
     int qtdLista = 0;
     int op, id, i;
-
     struct cliente *Clientes = contaClientes(&qtdClientes);
     struct leitura *dados = alocaLista(&qtdLista, qtdClientes);
     Tatuagens *tattoos = contaEalocaTatuagens(&qtdTattoos);
@@ -34,9 +33,13 @@ int main(void)
         printf("5 - Editar informacao do cliente\n"); //funciona
         printf("6 - Buscar cliente por nome\n");          // Criar, Artur
         printf("7 - Listar clientes e suas tatuagens\n"); // Criar, Artur
-        printf("8 - Sair\n");
-        scanf(" %d", &op);
-
+        printf("8 - Sair\n");       
+    
+        if((scanf(" %d", &op)) != 1){
+        printf("Permitido apenas numeros\n");
+        while(getchar() != '\n');
+        }
+        else{
         switch (op)
         {
         case 1:
@@ -92,7 +95,7 @@ int main(void)
             printf("Digite uma opcao valida!\n");
             break;
         }
-
+        }
     } while (op != 8);
     return 0;
 }

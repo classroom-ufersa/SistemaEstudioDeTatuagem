@@ -106,10 +106,10 @@ void imprimeDadosTatuagens(Tatuagens *tattoos, int qtd)
         printf("| %d | Estilo: %s, Preco: %.2f, Cores: %s\n", tattoos[j].identificacao, tattoos[j].estilo, tattoos[j].preco, tattoos[j].cores);
     }
 }
-
 void insereNovaTatuagemNoArquivo(int *numdeTatuagem)
 {
     Tatuagens aux;
+    int resultado;
 
     FILE *arquivo;
     arquivo = fopen("../Dados/DadosTattoos.txt", "a");
@@ -125,9 +125,15 @@ void insereNovaTatuagemNoArquivo(int *numdeTatuagem)
     scanf(" %[^\n]", aux.estilo);
     printf("Digite a cor: \n");
     scanf(" %[^\n]", aux.cores);
-    printf("Digite o preco: \n");
-    scanf(" %f", &aux.preco);
-    getchar();
+
+    do {
+        printf("Digite o preco: \n");
+        resultado = scanf(" %f", &aux.preco);
+        while(getchar() != '\n'); // Limpa o buffer de entrada
+        if(resultado == 0) {
+            printf("Por favor, insira um número válido para o preço.\n");
+        }
+    } while(resultado == 0);
 
     (*numdeTatuagem)++;
     aux.identificacao = *numdeTatuagem;
@@ -135,6 +141,7 @@ void insereNovaTatuagemNoArquivo(int *numdeTatuagem)
     fprintf(arquivo, "%d\t%s\t%.2f\t%s\n", aux.identificacao, aux.estilo, aux.preco, aux.cores);
     fclose(arquivo);
 }
+
 
 void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, struct leitura *aux, int id, int qtdL)
 {

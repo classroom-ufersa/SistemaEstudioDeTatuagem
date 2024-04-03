@@ -102,9 +102,7 @@ void mostrarDados(struct cliente *Cliente, int qtdClientes)
 
 void adicionaCliente(int *q, int *lista)
 {
-    // Obrigatoriamente, o primeiro digito do nome deve ser maiusculo, implementar mais tarde
     struct cliente Aux;
-
     FILE *arquivo;
     arquivo = fopen("../Dados/DadosClientes.txt", "a");
 
@@ -113,18 +111,21 @@ void adicionaCliente(int *q, int *lista)
         printf("Problema ao abrir o arquivo\n");
         return;
     }
-
-    printf("Digite o nome do cliente: \n");
+    do {
+    printf("Digite o nome: \n");
     scanf(" %[^\n]", Aux.nome);
-    printf("Digite o e-mail: \n");
-    scanf(" %[^\n]", Aux.email);
+    } while (!validaNome(Aux.nome));
+
+    do {
+        printf("Digite o e-mail: \n");
+        scanf(" %[^\n]", Aux.email);
+    } while (!validaEmail(Aux.email));
 
     fprintf(arquivo, "%s\t%s\n", Aux.nome, Aux.email);
+    (*q)++;
     fclose(arquivo);
 
-    (*q)++;
     FILE *arquivob;
-
     arquivob = fopen("../Dados/ListaTatuagens.txt", "a");
     if (arquivob == NULL)
     {
@@ -136,6 +137,7 @@ void adicionaCliente(int *q, int *lista)
     fclose(arquivob);
     (*lista)++;
 }
+
 
 void removeCliente(struct leitura *aux, struct cliente *clientes, int *qtdClientes, int ind, int *qtdLeitura)
 {
@@ -185,35 +187,45 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
     printf("1 - Editar nome do cliente\n");
     printf("2 - Editar email do cliente\n");
     printf("3 - Editar tatuagens do cliente\n");
-    scanf(" %d", &op);
-
+ if((scanf(" %d", &op)) != 1){
+        printf("Permitido apenas numeros\n");
+        while(getchar() != '\n');
+        }
+        else{
     switch (op)
     {
     case 1:
 
-        printf("Digite o novo nome do cliente: \n");
-        scanf(" %[^\n]", Cedit[id].nome);
-        printf("Dado alterado!\n");
-        ordenaNome(Cedit, *qtdC);
-        escreverOrd(Cedit, *qtdC);
+    do {
+    printf("Digite o novo nome do cliente: \n");
+    scanf(" %[^\n]", Cedit[id].nome);
+    } while (!validaNome(Cedit[id].nome));
 
-        break;
-
+    printf("Dado alterado!\n");
+    ordenaNome(Cedit, *qtdC);
+    escreverOrd(Cedit, *qtdC);
+    break;
+    
     case 2:
 
+       do {
         printf("Digite o novo email do cliente: \n");
         scanf(" %[^\n]", Cedit[id].email);
-        printf("Dado alterado!\n");
-        escreverOrd(Cedit, *qtdC);
-
-        break;
+    } while (!validaEmail(Cedit[id].email));
+    printf("Dado alterado!\n");
+    escreverOrd(Cedit, *qtdC);
+    break;
 
     case 3:
 
         printf("1 - Adicionar uma tatuagem ao cliente.\n");
         printf("2 - Remover uma tatuagem do cliente.\n");
-        scanf(" %d", &opb);
-
+        ;
+        if((scanf(" %d", &opb)) != 1){
+        printf("Permitido apenas numeros\n");
+        while(getchar() != '\n');
+        }
+        else{
         do
         {
 
@@ -253,11 +265,12 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
             }
 
         } while (opb != 3);
-
+        }
         break;
     default:
         printf("Opcao invalida!\n");
         break;
+    }
     }
 }
 
@@ -297,4 +310,41 @@ void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int Qtdc, int Qtdt
         fscanf(arquivo, "\n");
     }
     fclose(arquivo);
+}
+
+int validaEmail(char* email) {
+    if (strstr(email, "@") == NULL) {
+        printf("O e-mail deve conter @.\n");
+        return 0;
+    }
+
+    if (strstr(email, ".") == NULL) {
+        printf("O e-mail deve conter um ponto (.)\n");
+        return 0;
+    }
+
+    if (strstr(email, "hotmail.com") == NULL && strstr(email, "gmail.com") == NULL) {
+        printf("O e-mail deve conter hotmail.com ou gmail.com.\n");
+        return 0;
+    }
+
+    return 1;
+}
+
+int validaNome(char* nome) {
+    int i;
+ 
+    for (i = 0; nome[i]; i++) {
+        if ((nome[i] < 'A' || nome[i] > 'Z') && (nome[i] < 'a' || nome[i] > 'z') && nome[i] != ' ') {
+            printf("O nome deve conter apenas letras.\n");
+            return 0;
+        }
+    }
+
+     if (nome[0] < 'A' || nome[0] > 'Z') {
+        printf("A primeira letra do nome deve ser maiúscula.\n");
+        return 0;
+    }
+
+    return 1;
 }
