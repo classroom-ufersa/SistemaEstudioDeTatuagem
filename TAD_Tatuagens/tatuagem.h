@@ -26,8 +26,8 @@ void coletaDadosTatuagens(Tatuagens *tattoo, int qtdC);
 // Função para imprimir os dados das tatuagens
 void imprimeDadosTatuagens(Tatuagens *tattoos, int qtd);
 
-// Função que insere uma nova tatuagem no arquivo de texto
-void insereNovaTatuagemNoArquivo(int *numdeTatuagem);
+// Função que insere uma nova tatuagem
+void insereNovaTatuagem(int *numdeTatuagem, Tatuagens **novaTatuagem);
 
 // Função para remover tatuagem da lista encadeada
 void removeTatuagemDaLista(No **primeiro, int identificacao, struct leitura *aux, int idc, int qtdC, const char *nome);
@@ -49,6 +49,9 @@ void reescreveLista(struct leitura *escreve, int qtdL);
 
 // Função que aloca memória para a struct 'leitura'
 struct leitura *alocaLista(int *qtd, int Qtdc);
+
+// Função para realocar memória
+void realocaLista(struct leitura **novaLista, int *n);
 
 // Função que verifica se o cliente excedeu a quantidade de tatuagens e grava uma nova tatuagem
 void verificaInsere(struct leitura *grava, int idT, char *nome);

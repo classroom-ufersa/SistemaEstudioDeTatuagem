@@ -106,42 +106,39 @@ void imprimeDadosTatuagens(Tatuagens *tattoos, int qtd)
         printf("| %d | Estilo: %s, Preco: %.2f, Cores: %s\n", tattoos[j].identificacao, tattoos[j].estilo, tattoos[j].preco, tattoos[j].cores);
     }
 }
-void insereNovaTatuagemNoArquivo(int *numdeTatuagem)
+
+void insereNovaTatuagem(int *numdeTatuagem, Tatuagens **novaTatuagem)
 {
-    Tatuagens aux;
     int resultado;
 
-    FILE *arquivo;
-    arquivo = fopen("../Dados/DadosTattoos.txt", "a");
-
-    if (arquivo == NULL)
+    *novaTatuagem = realloc(*novaTatuagem, ((*numdeTatuagem) + 1) * sizeof(Tatuagens));
+    if (*novaTatuagem == NULL)
     {
-        printf("Problema na abertura do arquivo!\n");
+        printf("Problema na realocacao.\n");
         exit(1);
     }
 
     getchar();
     printf("Digite o estilo: \n");
-    scanf(" %[^\n]", aux.estilo);
+    scanf(" %[^\n]", (*novaTatuagem)[*numdeTatuagem].estilo);
     printf("Digite a cor: \n");
-    scanf(" %[^\n]", aux.cores);
+    scanf(" %[^\n]", (*novaTatuagem)[*numdeTatuagem].cores);
 
-    do {
+    do
+    {
         printf("Digite o preco: \n");
-        resultado = scanf(" %f", &aux.preco);
-        while(getchar() != '\n'); // Limpa o buffer de entrada
-        if(resultado == 0) {
-            printf("Por favor, insira um número válido para o preço.\n");
+        resultado = scanf(" %f", &(*novaTatuagem)[*numdeTatuagem].preco);
+        while (getchar() != '\n')
+            ;
+        if (resultado == 0)
+        {
+            printf("Por favor, insira um numero valido para o preco.\n");
         }
-    } while(resultado == 0);
+    } while (resultado == 0);
 
+    (*novaTatuagem)[*numdeTatuagem].identificacao = *numdeTatuagem + 1;
     (*numdeTatuagem)++;
-    aux.identificacao = *numdeTatuagem;
-
-    fprintf(arquivo, "%d\t%s\t%.2f\t%s\n", aux.identificacao, aux.estilo, aux.preco, aux.cores);
-    fclose(arquivo);
 }
-
 
 void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, struct leitura *aux, int id, int qtdL)
 {
@@ -207,7 +204,7 @@ void removeTatuagemDaLista(No **primeiro, int identificacao, struct leitura *aux
                 {
                     aux[j].idsT[i] = 0;
                     aux[j].numerodeT = aux[j].numerodeT - 1;
-                    printf("%d", aux[j].numerodeT);
+                    return;
                 }
             }
         }
@@ -328,6 +325,17 @@ struct leitura *alocaLista(int *qtdL, int qtdC)
     *qtdL = tamanho;
 
     return ler;
+}
+
+void realocaLista(struct leitura **novaLista, int *n)
+{
+    *novaLista = realloc(*novaLista, ((*n) + 1) * sizeof(struct leitura));
+    if (*novaLista == NULL)
+    {
+        printf("Problema na realocacao.\n");
+        exit(1);
+    }
+    (*n)++;
 }
 
 void lerLista(struct leitura *lendo, int qtdL)

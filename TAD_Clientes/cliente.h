@@ -12,7 +12,7 @@ struct cliente *contaClientes(int *qtd);
 // Função para coleta de informações de cada cliente
 void coletaClientes(struct cliente *clientes, int qtd);
 
-//Função para mostrar dados de clientes com o seu índice
+// Função para mostrar dados de clientes com o seu índice
 void mostrarDados(struct cliente *Cliente, int qtdClientes);
 
 // Função auxiliar para a função ordena/qsort
@@ -25,7 +25,7 @@ void ordenaNome(struct cliente *Cliente, int qtdClientes);
 void escreverOrd(struct cliente *clientes, int qtdClientes);
 
 // Função para adicionar um cliente
-void adicionaCliente(int *q, int *lista);
+void adicionaCliente(int *q, int *lista, struct cliente **clienteNovo, struct leitura **novaLista);
 
 // Função para remover um cliente do vetor e do arquivo de texto
 void removeCliente(struct leitura *aux, struct cliente *clientes, int *qtdClientes, int ind, int *qtdLeitura);
@@ -40,7 +40,7 @@ void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int Qtdc, int Qtdt
 void escreveTattoos(Tatuagens *tattoos, int qtdT);
 
 // Função para verificação no emaill.
-int validaEmail(char* email);
+int validaEmail(char *email);
 
 // Função de verificação do nome.
-int validaNome(char* nome);
+int validaNome(char *nome);

@@ -100,44 +100,41 @@ void mostrarDados(struct cliente *Cliente, int qtdClientes)
     }
 }
 
-void adicionaCliente(int *q, int *lista)
+void adicionaCliente(int *q, int *lista, struct cliente **clienteNovo, struct leitura **novaLista)
 {
-    struct cliente Aux;
+    *clienteNovo = realloc(*clienteNovo, ((*q) + 1) * sizeof(struct cliente));
+    if (*clienteNovo == NULL)
+    {
+        printf("Problema na realocacao.\n");
+        exit(1);
+    }
+    do
+    {
+        printf("Digite o nome: \n");
+        scanf(" %[^\n]", (*clienteNovo)[*q].nome);
+    } while (!validaNome((*clienteNovo)[*q].nome));
+
+    do
+    {
+        printf("Digite o e-mail: \n");
+        scanf(" %[^\n]", (*clienteNovo)[*q].email);
+
+    } while (!validaEmail((*clienteNovo)[*q].email));
+    (*q)++;
+
     FILE *arquivo;
-    arquivo = fopen("../Dados/DadosClientes.txt", "a");
+    arquivo = fopen("../Dados/ListaTatuagens.txt", "a");
 
     if (arquivo == NULL)
     {
         printf("Problema ao abrir o arquivo\n");
         return;
     }
-    do {
-    printf("Digite o nome: \n");
-    scanf(" %[^\n]", Aux.nome);
-    } while (!validaNome(Aux.nome));
 
-    do {
-        printf("Digite o e-mail: \n");
-        scanf(" %[^\n]", Aux.email);
-    } while (!validaEmail(Aux.email));
-
-    fprintf(arquivo, "%s\t%s\n", Aux.nome, Aux.email);
-    (*q)++;
+    realocaLista(novaLista, lista);
+    fprintf(arquivo, "%s\t%d\n", (*clienteNovo)[*q - 1].nome, 0);
     fclose(arquivo);
-
-    FILE *arquivob;
-    arquivob = fopen("../Dados/ListaTatuagens.txt", "a");
-    if (arquivob == NULL)
-    {
-        printf("Problema ao abrir o arquivo\n");
-        return;
-    }
-
-    fprintf(arquivob, "%s\t%d\n", Aux.nome, 0);
-    fclose(arquivob);
-    (*lista)++;
 }
-
 
 void removeCliente(struct leitura *aux, struct cliente *clientes, int *qtdClientes, int ind, int *qtdLeitura)
 {
@@ -187,90 +184,98 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
     printf("1 - Editar nome do cliente\n");
     printf("2 - Editar email do cliente\n");
     printf("3 - Editar tatuagens do cliente\n");
- if((scanf(" %d", &op)) != 1){
-        printf("Permitido apenas numeros\n");
-        while(getchar() != '\n');
-        }
-        else{
-    switch (op)
+    if ((scanf(" %d", &op)) != 1)
     {
-    case 1:
-
-    do {
-    printf("Digite o novo nome do cliente: \n");
-    scanf(" %[^\n]", Cedit[id].nome);
-    } while (!validaNome(Cedit[id].nome));
-
-    printf("Dado alterado!\n");
-    ordenaNome(Cedit, *qtdC);
-    escreverOrd(Cedit, *qtdC);
-    break;
-    
-    case 2:
-
-       do {
-        printf("Digite o novo email do cliente: \n");
-        scanf(" %[^\n]", Cedit[id].email);
-    } while (!validaEmail(Cedit[id].email));
-    printf("Dado alterado!\n");
-    escreverOrd(Cedit, *qtdC);
-    break;
-
-    case 3:
-
-        printf("1 - Adicionar uma tatuagem ao cliente.\n");
-        printf("2 - Remover uma tatuagem do cliente.\n");
-        ;
-        if((scanf(" %d", &opb)) != 1){
         printf("Permitido apenas numeros\n");
-        while(getchar() != '\n');
-        }
-        else{
-        do
+        while (getchar() != '\n')
+            ;
+    }
+    else
+    {
+        switch (op)
         {
+        case 1:
 
-            if (opb == 1)
+            do
             {
-                imprimeDadosTatuagens(Tedit, *qtdT);
-                printf("Digite o ID da tatuagem que deseja inserir na lista do cliente: \n");
-                scanf(" %d", &ida);
+                printf("Digite o novo nome do cliente: \n");
+                scanf(" %[^\n]", Cedit[id].nome);
+            } while (!validaNome(Cedit[id].nome));
 
-                verificaInsere(aux, ida, Cedit[id].nome);
-                Cedit[id].lista_de_tatuagens = carregaTatuagensNaLista(Cedit[id].lista_de_tatuagens, ida, Tedit, *qtdT);
+            printf("Dado alterado!\n");
+            ordenaNome(Cedit, *qtdC);
+            escreverOrd(Cedit, *qtdC);
+            break;
 
-                opb = 3;
-            }
+        case 2:
 
-            else if (opb == 2)
+            do
             {
-                if (verifica_vazio(Cedit[id].lista_de_tatuagens))
-                {
-                    printf("O cliente nao possui tatuagens!\n");
-                    opb = 3;
-                    return;
-                }
+                printf("Digite o novo email do cliente: \n");
+                scanf(" %[^\n]", Cedit[id].email);
+            } while (!validaEmail(Cedit[id].email));
+            printf("Dado alterado!\n");
+            escreverOrd(Cedit, *qtdC);
+            break;
 
-                lst_Imprime(Cedit[id].lista_de_tatuagens);
-                printf("Digite o ID da tatuagem que deseja remover: \n");
-                scanf(" %d", &idb);
+        case 3:
 
-                removeTatuagemDaLista(&Cedit[id].lista_de_tatuagens, idb, aux, id, *qtdC, Cedit[id].nome);
-                
-                opb = 3;
+            printf("1 - Adicionar uma tatuagem ao cliente.\n");
+            printf("2 - Remover uma tatuagem do cliente.\n");
+            ;
+            if ((scanf(" %d", &opb)) != 1)
+            {
+                printf("Permitido apenas numeros\n");
+                while (getchar() != '\n')
+                    ;
             }
-
             else
             {
-                printf("Opcao invalida! \n");
-            }
+                do
+                {
 
-        } while (opb != 3);
+                    if (opb == 1)
+                    {
+                        imprimeDadosTatuagens(Tedit, *qtdT);
+                        printf("Digite o ID da tatuagem que deseja inserir na lista do cliente: \n");
+                        scanf(" %d", &ida);
+
+                        verificaInsere(aux, ida, Cedit[id].nome);
+                        Cedit[id].lista_de_tatuagens = carregaTatuagensNaLista(Cedit[id].lista_de_tatuagens, ida, Tedit, *qtdT);
+
+                        opb = 3;
+                    }
+
+                    else if (opb == 2)
+                    {
+                        if (verifica_vazio(Cedit[id].lista_de_tatuagens))
+                        {
+                            printf("O cliente nao possui tatuagens!\n");
+                            opb = 3;
+                            return;
+                        }
+
+                        lst_Imprime(Cedit[id].lista_de_tatuagens);
+                        printf("Digite o ID da tatuagem que deseja remover: \n");
+                        scanf(" %d", &idb);
+
+                        removeTatuagemDaLista(&Cedit[id].lista_de_tatuagens, idb, aux, id, *qtdC, Cedit[id].nome);
+
+                        opb = 3;
+                    }
+
+                    else
+                    {
+                        printf("Opcao invalida! \n");
+                    }
+
+                } while (opb != 3);
+            }
+            break;
+        default:
+            printf("Opcao invalida!\n");
+            break;
         }
-        break;
-    default:
-        printf("Opcao invalida!\n");
-        break;
-    }
     }
 }
 
@@ -312,18 +317,22 @@ void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int Qtdc, int Qtdt
     fclose(arquivo);
 }
 
-int validaEmail(char* email) {
-    if (strstr(email, "@") == NULL) {
+int validaEmail(char *email)
+{
+    if (strstr(email, "@") == NULL)
+    {
         printf("O e-mail deve conter @.\n");
         return 0;
     }
 
-    if (strstr(email, ".") == NULL) {
+    if (strstr(email, ".") == NULL)
+    {
         printf("O e-mail deve conter um ponto (.)\n");
         return 0;
     }
 
-    if (strstr(email, "hotmail.com") == NULL && strstr(email, "gmail.com") == NULL) {
+    if (strstr(email, "hotmail.com") == NULL && strstr(email, "gmail.com") == NULL)
+    {
         printf("O e-mail deve conter hotmail.com ou gmail.com.\n");
         return 0;
     }
@@ -331,17 +340,21 @@ int validaEmail(char* email) {
     return 1;
 }
 
-int validaNome(char* nome) {
+int validaNome(char *nome)
+{
     int i;
- 
-    for (i = 0; nome[i]; i++) {
-        if ((nome[i] < 'A' || nome[i] > 'Z') && (nome[i] < 'a' || nome[i] > 'z') && nome[i] != ' ') {
+
+    for (i = 0; nome[i]; i++)
+    {
+        if ((nome[i] < 'A' || nome[i] > 'Z') && (nome[i] < 'a' || nome[i] > 'z') && nome[i] != ' ')
+        {
             printf("O nome deve conter apenas letras.\n");
             return 0;
         }
     }
 
-     if (nome[0] < 'A' || nome[0] > 'Z') {
+    if (nome[0] < 'A' || nome[0] > 'Z')
+    {
         printf("A primeira letra do nome deve ser maiúscula.\n");
         return 0;
     }
