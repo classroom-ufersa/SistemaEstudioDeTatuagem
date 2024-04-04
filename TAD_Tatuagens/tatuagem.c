@@ -150,13 +150,14 @@ void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, struct leitura
         if (tatuagens[i].identificacao == id)
         {
             posicao_remover = i;
+            printf("ID removido com sucesso\n");
             break;
         }
     }
 
     if (posicao_remover == -1)
     {
-        printf("ID %d nao encontrada.\n", id);
+        printf("ID nao encontrado.\n", id);
         return;
     }
 
@@ -218,7 +219,7 @@ void removeTatuagemDaLista(No **primeiro, int identificacao, struct leitura *aux
 
     if (atual == NULL)
     {
-        printf("Id: %d nao encontrado na lista.\n", identificacao);
+        printf("Id nao encontrado na lista.\n");
         return;
     }
 

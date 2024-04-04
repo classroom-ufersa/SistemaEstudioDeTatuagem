@@ -39,8 +39,7 @@ int main(void)
         if ((scanf(" %d", &op)) != 1)
         {
             printf("Permitido apenas numeros\n");
-            while (getchar() != '\n')
-                ;
+            while (getchar() != '\n');
         }
         else
         {
@@ -55,7 +54,11 @@ int main(void)
             case 2:
                 mostrarDados(Clientes, qtdClientes);
                 printf("Qual cliente deseja remover?\n");
-                scanf(" %d", &id);
+                 if ((scanf(" %d", &id)) != 1)
+        {
+            printf("Permitido apenas numeros\n");
+            while (getchar() != '\n');
+        }
                 removeCliente(dados, Clientes, &qtdClientes, id, &qtdLista);
                 break;
 
@@ -67,16 +70,24 @@ int main(void)
                 imprimeDadosTatuagens(tattoos, qtdTattoos);
                 printf("\nAtencao! Remover uma tatuagem tambem removera dos clientes que a possuem.\n");
                 printf("Digite o ID da tatuagem que deseja remover: ");
-                scanf("%d", &id);
+                    if ((scanf(" %d", &id)) != 1)
+        {
+            printf("Permitido apenas numeros\n");
+            while (getchar() != '\n');
+        }
                 removeTatuagemPorId(tattoos, &qtdTattoos, dados, id, qtdLista);
                 break;
 
             case 5:
-                mostrarDados(Clientes, qtdClientes);
-                printf("Digite o ID do cliente: \n");
-                scanf(" %d", &id);
-                menuEdit(dados, id, Clientes, tattoos, &qtdTattoos, &qtdClientes);
-                break;
+        mostrarDados(Clientes, qtdClientes);
+       printf("Digite o ID do cliente: \n");
+       while ((scanf(" %d", &id)) != 1 || id < 0 || id >= qtdClientes)
+       {
+        printf("Insira um ID de cliente válido:\n");
+        while (getchar() != '\n'); 
+        }
+       menuEdit(dados, id, Clientes, tattoos, &qtdTattoos, &qtdClientes);
+        break;
 
             case 6:
                 // a criar

@@ -187,8 +187,7 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
     if ((scanf(" %d", &op)) != 1)
     {
         printf("Permitido apenas numeros\n");
-        while (getchar() != '\n')
-            ;
+        while (getchar() != '\n');
     }
     else
     {
@@ -226,8 +225,7 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
             if ((scanf(" %d", &opb)) != 1)
             {
                 printf("Permitido apenas numeros\n");
-                while (getchar() != '\n')
-                    ;
+                while (getchar() != '\n');
             }
             else
             {
@@ -238,8 +236,11 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
                     {
                         imprimeDadosTatuagens(Tedit, *qtdT);
                         printf("Digite o ID da tatuagem que deseja inserir na lista do cliente: \n");
-                        scanf(" %d", &ida);
-
+                        if ((scanf(" %d", &ida)) != 1)
+            {
+                printf("Permitido apenas numeros\n");
+                while (getchar() != '\n');
+            }
                         verificaInsere(aux, ida, Cedit[id].nome);
                         Cedit[id].lista_de_tatuagens = carregaTatuagensNaLista(Cedit[id].lista_de_tatuagens, ida, Tedit, *qtdT);
 
@@ -257,10 +258,14 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
 
                         lst_Imprime(Cedit[id].lista_de_tatuagens);
                         printf("Digite o ID da tatuagem que deseja remover: \n");
-                        scanf(" %d", &idb);
-
+                        
+            if ((scanf(" %d", &idb)) != 1)
+            {
+                printf("Permitido apenas numeros\n");
+                while (getchar() != '\n');
+            }
                         removeTatuagemDaLista(&Cedit[id].lista_de_tatuagens, idb, aux, id, *qtdC, Cedit[id].nome);
-
+                       
                         opb = 3;
                     }
 
@@ -355,7 +360,7 @@ int validaNome(char *nome)
 
     if (nome[0] < 'A' || nome[0] > 'Z')
     {
-        printf("A primeira letra do nome deve ser maiúscula.\n");
+        printf("A primeira letra do nome deve ser maiuscula.\n");
         return 0;
     }
 
