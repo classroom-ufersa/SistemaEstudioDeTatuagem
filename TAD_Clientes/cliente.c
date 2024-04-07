@@ -187,7 +187,8 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
     if ((scanf(" %d", &op)) != 1)
     {
         printf("Permitido apenas numeros\n");
-        while (getchar() != '\n');
+        while (getchar() != '\n')
+            ;
     }
     else
     {
@@ -225,7 +226,8 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
             if ((scanf(" %d", &opb)) != 1)
             {
                 printf("Permitido apenas numeros\n");
-                while (getchar() != '\n');
+                while (getchar() != '\n')
+                    ;
             }
             else
             {
@@ -237,10 +239,11 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
                         imprimeDadosTatuagens(Tedit, *qtdT);
                         printf("Digite o ID da tatuagem que deseja inserir na lista do cliente: \n");
                         if ((scanf(" %d", &ida)) != 1)
-            {
-                printf("Permitido apenas numeros\n");
-                while (getchar() != '\n');
-            }
+                        {
+                            printf("Permitido apenas numeros\n");
+                            while (getchar() != '\n')
+                                ;
+                        }
                         verificaInsere(aux, ida, Cedit[id].nome);
                         Cedit[id].lista_de_tatuagens = carregaTatuagensNaLista(Cedit[id].lista_de_tatuagens, ida, Tedit, *qtdT);
 
@@ -258,14 +261,15 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
 
                         lst_Imprime(Cedit[id].lista_de_tatuagens);
                         printf("Digite o ID da tatuagem que deseja remover: \n");
-                        
-            if ((scanf(" %d", &idb)) != 1)
-            {
-                printf("Permitido apenas numeros\n");
-                while (getchar() != '\n');
-            }
+
+                        if ((scanf(" %d", &idb)) != 1)
+                        {
+                            printf("Permitido apenas numeros\n");
+                            while (getchar() != '\n')
+                                ;
+                        }
                         removeTatuagemDaLista(&Cedit[id].lista_de_tatuagens, idb, aux, id, *qtdC, Cedit[id].nome);
-                       
+
                         opb = 3;
                     }
 
@@ -365,4 +369,76 @@ int validaNome(char *nome)
     }
 
     return 1;
+}
+void buscaBinariaNome(struct cliente *clientes, int qtdClientes)
+{
+    char nomeDesejado[200];
+    int encontrado = 0;
+    int min = 0;
+    int max = qtdClientes - 1;
+    int meio;
+
+    printf("Digite o nome desejado: \n");
+    scanf(" %[^\n]", nomeDesejado);
+
+    while (min <= max)
+    {
+        meio = (min + max) / 2;
+
+        int comparacao = strcmp(clientes[meio].nome, nomeDesejado);
+        if (comparacao == 0)
+        {
+            printf("================================\n");
+            printf("Nome: %s\n", clientes[meio].nome);
+            printf("Endereco: %s \n", clientes[meio].email);
+            printf("Tatuagens do cliente: \n");
+
+            if (clientes[meio].lista_de_tatuagens == NULL)
+            {
+                printf("O cliente nao possui tatuagens!\n");
+                return;
+            }
+
+            lst_Imprime(clientes[meio].lista_de_tatuagens);
+            printf("================================\n");
+            
+            encontrado = 1;
+            break;
+        }
+        else if (comparacao < 0)
+        {
+            min = meio + 1;
+        }
+        else
+        {
+            max = meio - 1;
+        }
+    }
+
+    if (!encontrado)
+    {
+        printf("Cliente nao encontrado.\n");
+    }
+}
+
+void listarClientesEsuasTattoos(struct cliente *cliente, int qtdC)
+{
+    int i;
+    for (i = 0; i < qtdC; i++)
+    {
+        printf("Nome: %s\n", cliente[i].nome);
+        printf("Email: %s\n", cliente[i].email);
+
+        if (cliente[i].lista_de_tatuagens == NULL)
+        {
+            printf("O cliente nao possui tatuagens!\n");
+            printf("-------------------------\n");
+        }
+        else
+        {
+            printf("Tatuagens: \n");
+            lst_Imprime(cliente[i].lista_de_tatuagens);
+            printf("-------------------------\n");
+        }
+    }
 }

@@ -44,3 +44,9 @@ int validaEmail(char *email);
 
 // Função de verificação do nome.
 int validaNome(char *nome);
+
+// Função para busca binaria por nome de um cliente.
+void buscaBinariaNome(struct cliente *clientes, int qtdClientes);
+
+// Função para listar todos os clientes e suas tatuagens.
+void listarClientesEsuasTattoos(struct cliente *cliente, int qtdC);

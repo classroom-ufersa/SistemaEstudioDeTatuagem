@@ -107,7 +107,7 @@ void imprimeDadosTatuagens(Tatuagens *tattoos, int qtd)
     }
 }
 
-void insereNovaTatuagem(int *numdeTatuagem, Tatuagens **novaTatuagem)
+void realizarTatuagem(int *numdeTatuagem, Tatuagens **novaTatuagem)
 {
     int resultado;
 
@@ -398,6 +398,7 @@ void verificaInsere(struct leitura *grava, int idT, char *nome)
             break;
         }
     }
+    printf("%d", i);
 
     if (!encontrado)
     {
@@ -419,8 +420,6 @@ void verificaInsere(struct leitura *grava, int idT, char *nome)
             strcpy(grava[i].cliente, nome);
             grava[i].idsT[j] = idT;
             grava[i].numerodeT++;
-
-            printf("Tatuagem adicionada para o cliente %s.\n", nome);
             break;
         }
     }

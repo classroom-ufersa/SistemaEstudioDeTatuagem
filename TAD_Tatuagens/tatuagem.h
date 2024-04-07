@@ -27,7 +27,7 @@ void coletaDadosTatuagens(Tatuagens *tattoo, int qtdC);
 void imprimeDadosTatuagens(Tatuagens *tattoos, int qtd);
 
 // Função que insere uma nova tatuagem
-void insereNovaTatuagem(int *numdeTatuagem, Tatuagens **novaTatuagem);
+void realizarTatuagem(int *numdeTatuagem, Tatuagens **novaTatuagem);
 
 // Função para remover tatuagem da lista encadeada
 void removeTatuagemDaLista(No **primeiro, int identificacao, struct leitura *aux, int idc, int qtdC, const char *nome);
