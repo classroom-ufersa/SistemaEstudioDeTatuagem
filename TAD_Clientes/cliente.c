@@ -178,7 +178,7 @@ void removeCliente(struct leitura *aux, struct cliente *clientes, int *qtdClient
 
 void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *qtdC)
 {
-    int op, opb, ida, idb;
+    int op, opb, ida, idb, controle;
     getchar();
     printf("-_-_ AREA DE EDICAO _-_-\n");
     printf("1 - Editar nome do cliente\n");
@@ -244,8 +244,19 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
                             while (getchar() != '\n')
                                 ;
                         }
-                        verificaInsere(aux, ida, Cedit[id].nome);
-                        Cedit[id].lista_de_tatuagens = carregaTatuagensNaLista(Cedit[id].lista_de_tatuagens, ida, Tedit, *qtdT);
+
+                        if (ida >= *qtdT + 1 || ida < 0)
+                        {
+                            printf("ID invalido.\n");
+                            return;
+                        }
+
+                        controle = verificaInsere(aux, ida, Cedit[id].nome);
+
+                        if (controle != 1)
+                        {
+                            Cedit[id].lista_de_tatuagens = carregaTatuagensNaLista(Cedit[id].lista_de_tatuagens, ida, Tedit, *qtdT);
+                        }
 
                         opb = 3;
                     }
@@ -401,7 +412,7 @@ void buscaBinariaNome(struct cliente *clientes, int qtdClientes)
 
             lst_Imprime(clientes[meio].lista_de_tatuagens);
             printf("================================\n");
-            
+
             encontrado = 1;
             break;
         }

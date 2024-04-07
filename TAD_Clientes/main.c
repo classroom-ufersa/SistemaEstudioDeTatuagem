@@ -107,6 +107,9 @@ int main(void)
                 ordenaNome(Clientes, qtdClientes);
                 escreverOrd(Clientes, qtdClientes);
                 escreveTattoos(tattoos, qtdTattoos);
+                free(Clientes);
+                free(tattoos);
+                free(dados);
                 break;
 
             default:

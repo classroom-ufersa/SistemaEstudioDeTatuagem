@@ -385,7 +385,7 @@ void reescreveLista(struct leitura *escreve, int qtdL)
     fclose(arquivo);
 }
 
-void verificaInsere(struct leitura *grava, int idT, char *nome)
+int verificaInsere(struct leitura *grava, int idT, char *nome)
 {
     int i, j;
     int encontrado = 0;
@@ -398,18 +398,17 @@ void verificaInsere(struct leitura *grava, int idT, char *nome)
             break;
         }
     }
-    printf("%d", i);
 
     if (!encontrado)
     {
         printf("Cliente nao encontrado.\n");
-        return;
+        return 1;
     }
 
     if (grava[i].numerodeT == 10)
     {
         printf("O cliente %s nao tem mais espaço para tatuagens!\n", nome);
-        return;
+        return 1;
     }
 
     for (j = 0; j < 10; j++)

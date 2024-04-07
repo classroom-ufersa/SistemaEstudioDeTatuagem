@@ -54,7 +54,7 @@ struct leitura *alocaLista(int *qtd, int Qtdc);
 void realocaLista(struct leitura **novaLista, int *n);
 
 // Função que verifica se o cliente excedeu a quantidade de tatuagens e grava uma nova tatuagem
-void verificaInsere(struct leitura *grava, int idT, char *nome);
+int verificaInsere(struct leitura *grava, int idT, char *nome);
 
 // Função que remove a tatuagem do arquivo TXT.
 void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, struct leitura *aux, int id, int qtdL);
