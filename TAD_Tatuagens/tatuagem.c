@@ -115,7 +115,7 @@ void realizarTatuagem(int *numdeTatuagem, Tatuagens **novaTatuagem)
     if (*novaTatuagem == NULL)
     {
         printf("Problema na realocacao.\n");
-        exit(1);
+        return;
     }
 
     getchar();
@@ -311,7 +311,7 @@ struct leitura *alocaLista(int *qtdL, int qtdC)
     if (ler == NULL)
     {
         printf("Problema na alocacao\n");
-        exit(1);
+        return;
     }
 
     for (i = 0; i < tamanho; i++)
@@ -334,7 +334,7 @@ void realocaLista(struct leitura **novaLista, int *n)
     if (*novaLista == NULL)
     {
         printf("Problema na realocacao.\n");
-        exit(1);
+        return;
     }
     (*n)++;
 }
@@ -348,7 +348,7 @@ void lerLista(struct leitura *lendo, int qtdL)
     if (dados == NULL)
     {
         printf("Problema na abertura do arquivo!\n");
-        exit(1);
+        return;
     }
 
     for (i = 0; i < qtdL; i++)

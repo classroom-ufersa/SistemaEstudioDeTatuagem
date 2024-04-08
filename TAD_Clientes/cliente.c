@@ -21,7 +21,7 @@ struct cliente *contaClientes(int *qtd)
     if (arquivo == NULL)
     {
         printf("Problema na abertura do arquivo.\n");
-        exit(1);
+        return;
     }
 
     while (fscanf(arquivo, "%[^\n]\n", linha) != EOF)
@@ -106,7 +106,7 @@ void adicionaCliente(int *q, int *lista, struct cliente **clienteNovo, struct le
     if (*clienteNovo == NULL)
     {
         printf("Problema na realocacao.\n");
-        exit(1);
+        return;
     }
     do
     {
