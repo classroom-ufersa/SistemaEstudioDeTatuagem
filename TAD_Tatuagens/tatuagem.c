@@ -311,7 +311,7 @@ struct leitura *alocaLista(int *qtdL, int qtdC)
     if (ler == NULL)
     {
         printf("Problema na alocacao\n");
-        return;
+        exit(1);
     }
 
     for (i = 0; i < tamanho; i++)

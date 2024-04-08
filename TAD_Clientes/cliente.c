@@ -21,7 +21,7 @@ struct cliente *contaClientes(int *qtd)
     if (arquivo == NULL)
     {
         printf("Problema na abertura do arquivo.\n");
-        return;
+        exit(1);
     }
 
     while (fscanf(arquivo, "%[^\n]\n", linha) != EOF)
