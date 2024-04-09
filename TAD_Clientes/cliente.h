@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "../TAD_Tatuagens/tatuagem.h"
 
 // Struct do cliente
@@ -50,3 +51,6 @@ void buscaBinariaNome(struct cliente *clientes, int qtdClientes);
 
 // Função para listar todos os clientes e suas tatuagens.
 void listarClientesEsuasTattoos(struct cliente *cliente, int qtdC);
+
+// Função tratativa do MENU.
+int leropcao();

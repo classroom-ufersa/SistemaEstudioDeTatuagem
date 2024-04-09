@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 #include "cliente.h"
 
@@ -184,14 +185,12 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
     printf("1 - Editar nome do cliente\n");
     printf("2 - Editar email do cliente\n");
     printf("3 - Editar tatuagens do cliente\n");
-    if ((scanf(" %d", &op)) != 1)
-    {
+     op = leropcao();
+    if(op == -1) {
         printf("Permitido apenas numeros\n");
-        while (getchar() != '\n')
-            ;
+        while (getchar() != '\n');
+        return;
     }
-    else
-    {
         switch (op)
         {
         case 1:
@@ -222,15 +221,12 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
 
             printf("1 - Adicionar uma tatuagem ao cliente.\n");
             printf("2 - Remover uma tatuagem do cliente.\n");
-            ;
-            if ((scanf(" %d", &opb)) != 1)
-            {
-                printf("Permitido apenas numeros\n");
-                while (getchar() != '\n')
-                    ;
-            }
-            else
-            {
+            opb = leropcao();
+        if(opb == -1) {
+            printf("Permitido apenas numeros\n");
+            while (getchar() != '\n');
+            return;
+        }
                 do
                 {
 
@@ -290,13 +286,13 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
                     }
 
                 } while (opb != 3);
-            }
+            
             break;
         default:
             printf("Opcao invalida!\n");
             break;
         }
-    }
+    
 }
 
 void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int Qtdc, int Qtdt)
@@ -452,4 +448,26 @@ void listarClientesEsuasTattoos(struct cliente *cliente, int qtdC)
             printf("-------------------------\n");
         }
     }
+}
+
+int leropcao() {
+    char opcao[10];
+    int i;
+    printf("Digite a opcao desejada: ");
+    scanf("%s", opcao);
+
+    for (i = 0; opcao[i] != '\0'; i++) {
+        if (!isdigit(opcao[i])) {
+            printf("Opcao invalida. Informe um numero correspondente com as opcoes do menu.\n");
+            return -1;
+        }
+    }
+
+    int escolha = atoi(opcao);
+    if (escolha < 1 || escolha > 8) {
+        printf("Opcao invalida. Informe um numero entre 1 e 8.\n");
+        return -1; 
+    }
+
+    return escolha;
 }

@@ -35,15 +35,11 @@ int main(void)
         printf("6 - Buscar cliente por nome\n");
         printf("7 - Listar clientes e suas tatuagens\n");
         printf("8 - Sair\n");
-
-        if ((scanf(" %d", &op)) != 1)
-        {
-            printf("Permitido apenas numeros\n");
-            while (getchar() != '\n')
-                ;
+         op = leropcao(); 
+        if(op == -1) {
+            continue; 
         }
-        else
-        {
+
             switch (op)
             {
             case 1:
@@ -115,7 +111,7 @@ int main(void)
             default:
                 printf("Digite uma opcao valida!\n");
                 break;
-            }
+            
         }
     } while (op != 8);
     return 0;
