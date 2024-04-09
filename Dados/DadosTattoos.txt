@@ -1,0 +1,3 @@
+1	Lopisc	50.00	Vermelho
+2	Geometric	50.00	Vermelho
+3	Old School	150.00	Verde
