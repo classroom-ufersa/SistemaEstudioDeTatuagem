@@ -15,7 +15,7 @@ struct leitura;
 Tatuagens *contaEalocaTatuagens(int *qtd);
 
 // Função para verificar se a lista encadeada está vazia
-int verifica_vazio(No *l);
+int verificaVazio(No *l);
 
 // Função para inserir elementos na lista encadeada
 No *insereElementosNaLista(No *primeiro_no, int id, Tatuagens *aux);
@@ -36,7 +36,7 @@ void removeTatuagemDaLista(No **primeiro, int identificacao, struct leitura *aux
 void removeTatuagensRegistradas(struct leitura *aux, int *qtdLeitura, char *nomeCliente);
 
 // Função para imprimir uma lista encadeada
-void lst_Imprime(No *primeiro);
+void lstImprime(No *primeiro);
 
 // Função para carregar as tatuagens do cliente para sua lista encadeada
 No *carregaTatuagensNaLista(No *primeiro_no, int id, Tatuagens *tattoo, int qtdTattoos);

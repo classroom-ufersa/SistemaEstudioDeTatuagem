@@ -53,4 +53,4 @@ void buscaBinariaNome(struct cliente *clientes, int qtdClientes);
 void listarClientesEsuasTattoos(struct cliente *cliente, int qtdC);
 
 // Função tratativa do MENU.
-int leropcao();
+int lerOpcao();

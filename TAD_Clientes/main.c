@@ -8,19 +8,19 @@ int main(void)
     int qtdLista = 0;
     int op, id, i;
 
-    struct cliente *Clientes = contaClientes(&qtdClientes);
+    struct cliente *clientes = contaClientes(&qtdClientes);
     struct leitura *dados = alocaLista(&qtdLista, qtdClientes);
     Tatuagens *tattoos = contaEalocaTatuagens(&qtdTattoos);
 
     lerLista(dados, qtdLista);
-    coletaClientes(Clientes, qtdClientes);
-    ordenaNome(Clientes, qtdClientes);
-    escreverOrd(Clientes, qtdClientes);
+    coletaClientes(clientes, qtdClientes);
+    ordenaNome(clientes, qtdClientes);
+    escreverOrd(clientes, qtdClientes);
     coletaDadosTatuagens(tattoos, qtdTattoos);
 
     for (i = 0; i < qtdClientes; i++)
     {
-        coletarLista(Clientes, tattoos, qtdClientes, qtdTattoos);
+        coletarLista(clientes, tattoos, qtdClientes, qtdTattoos);
     }
 
     do
@@ -35,7 +35,8 @@ int main(void)
         printf("6 - Buscar cliente por nome\n");
         printf("7 - Listar clientes e suas tatuagens\n");
         printf("8 - Sair\n");
-         op = leropcao(); 
+        
+         op = lerOpcao(); 
         if(op == -1) {
             continue; 
         }
@@ -43,13 +44,13 @@ int main(void)
             switch (op)
             {
             case 1:
-                adicionaCliente(&qtdClientes, &qtdLista, &Clientes, &dados);
+                adicionaCliente(&qtdClientes, &qtdLista, &clientes, &dados);
                 lerLista(dados, qtdLista);
 
                 break;
 
             case 2:
-                mostrarDados(Clientes, qtdClientes);
+                mostrarDados(clientes, qtdClientes);
                 printf("Qual cliente deseja remover?\n");
                 if ((scanf(" %d", &id)) != 1)
                 {
@@ -57,7 +58,7 @@ int main(void)
                     while (getchar() != '\n')
                         ;
                 }
-                removeCliente(dados, Clientes, &qtdClientes, id, &qtdLista);
+                removeCliente(dados, clientes, &qtdClientes, id, &qtdLista);
                 break;
 
             case 3:
@@ -78,7 +79,7 @@ int main(void)
                 break;
 
             case 5:
-                mostrarDados(Clientes, qtdClientes);
+                mostrarDados(clientes, qtdClientes);
                 printf("Digite o ID do cliente: \n");
                 while ((scanf(" %d", &id)) != 1 || id < 0 || id >= qtdClientes)
                 {
@@ -86,24 +87,24 @@ int main(void)
                     while (getchar() != '\n')
                         ;
                 }
-                menuEdit(dados, id, Clientes, tattoos, &qtdTattoos, &qtdClientes);
+                menuEdit(dados, id, clientes, tattoos, &qtdTattoos, &qtdClientes);
                 break;
 
             case 6:
-                buscaBinariaNome(Clientes, qtdClientes);
+                buscaBinariaNome(clientes, qtdClientes);
                 break;
 
             case 7:
-                listarClientesEsuasTattoos(Clientes, qtdClientes);
+                listarClientesEsuasTattoos(clientes, qtdClientes);
                 break;
 
             case 8:
                 printf("Obrigado!\n");
                 reescreveLista(dados, qtdLista);
-                ordenaNome(Clientes, qtdClientes);
-                escreverOrd(Clientes, qtdClientes);
+                ordenaNome(clientes, qtdClientes);
+                escreverOrd(clientes, qtdClientes);
                 escreveTattoos(tattoos, qtdTattoos);
-                free(Clientes);
+                free(clientes);
                 free(tattoos);
                 free(dados);
                 break;

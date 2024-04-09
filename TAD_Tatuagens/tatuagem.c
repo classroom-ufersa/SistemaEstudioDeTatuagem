@@ -42,7 +42,7 @@ Tatuagens *contaEalocaTatuagens(int *qtd)
     return tattoos;
 }
 
-int verifica_vazio(No *l)
+int verificaVazio(No *l)
 {
     if (l == NULL)
         return 1;
@@ -50,7 +50,7 @@ int verifica_vazio(No *l)
         return 0;
 }
 
-No *insereElementosNaLista(No *primeiro_no, int id, Tatuagens *aux)
+No *insereElementosNaLista(No *primeiroNo, int id, Tatuagens *aux)
 {
     int i;
 
@@ -61,7 +61,7 @@ No *insereElementosNaLista(No *primeiro_no, int id, Tatuagens *aux)
 
     novo->tatuagem.identificacao = aux[id].identificacao;
     novo->tatuagem.preco = aux[id].preco;
-    novo->prox = primeiro_no;
+    novo->prox = primeiroNo;
 
     return novo;
 }
@@ -144,24 +144,24 @@ void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, struct leitura
 {
     int i, j;
 
-    int posicao_remover = -1;
+    int posicaoRemover = -1;
     for (i = 0; i < *qtdTatuagens; i++)
     {
         if (tatuagens[i].identificacao == id)
         {
-            posicao_remover = i;
+            posicaoRemover = i;
             printf("ID removido com sucesso\n");
             break;
         }
     }
 
-    if (posicao_remover == -1)
+    if (posicaoRemover == -1)
     {
         printf("ID nao encontrado.\n", id);
         return;
     }
 
-    for (i = posicao_remover; i < *qtdTatuagens - 1; i++)
+    for (i = posicaoRemover; i < *qtdTatuagens - 1; i++)
     {
         tatuagens[i] = tatuagens[i + 1];
     }
@@ -261,7 +261,7 @@ void removeTatuagensRegistradas(struct leitura *aux, int *qtdLeitura, char *nome
     }
 }
 
-void lst_Imprime(No *primeiro)
+void lstImprime(No *primeiro)
 {
     No *aux;
 
@@ -272,7 +272,7 @@ void lst_Imprime(No *primeiro)
     }
 }
 
-No *carregaTatuagensNaLista(No *primeiro_no, int id, Tatuagens *tattoo, int qtdTattoos)
+No *carregaTatuagensNaLista(No *primeiroNo, int id, Tatuagens *tattoo, int qtdTattoos)
 {
     int i;
 
@@ -285,7 +285,7 @@ No *carregaTatuagensNaLista(No *primeiro_no, int id, Tatuagens *tattoo, int qtdT
             if (novo == NULL)
             {
                 printf("Falha na alocacao.\n");
-                return primeiro_no;
+                return primeiroNo;
             }
 
             strcpy(novo->tatuagem.cores, tattoo[i].cores);
@@ -293,14 +293,14 @@ No *carregaTatuagensNaLista(No *primeiro_no, int id, Tatuagens *tattoo, int qtdT
 
             novo->tatuagem.identificacao = tattoo[i].identificacao;
             novo->tatuagem.preco = tattoo[i].preco;
-            novo->prox = primeiro_no;
+            novo->prox = primeiroNo;
 
             return novo;
         }
     }
     printf("ID da tatuagem nao encontrado.\n");
 
-    return primeiro_no;
+    return primeiroNo;
 }
 
 struct leitura *alocaLista(int *qtdL, int qtdC)

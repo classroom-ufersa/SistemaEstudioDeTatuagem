@@ -91,13 +91,13 @@ void escreverOrd(struct cliente *clientes, int qtdClientes)
     fclose(arquivo);
 }
 
-void mostrarDados(struct cliente *Cliente, int qtdClientes)
+void mostrarDados(struct cliente *cliente, int qtdClientes)
 {
     int j;
 
     for (j = 0; j < qtdClientes; j++)
     {
-        printf("| %d |Nome: %s, E-mail: %s\n", j, Cliente[j].nome, Cliente[j].email);
+        printf("| %d |Nome: %s, E-mail: %s\n", j, cliente[j].nome, cliente[j].email);
     }
 }
 
@@ -177,7 +177,7 @@ void removeCliente(struct leitura *aux, struct cliente *clientes, int *qtdClient
     printf("!!!! O cliente foi deletado !!!!\n");
 }
 
-void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Tedit, int *qtdT, int *qtdC)
+void menuEdit(struct leitura *aux, int id, struct cliente *cEdit, Tatuagens *tEdit, int *qtdT, int *qtdC)
 {
     int op, opb, ida, idb, controle;
     getchar();
@@ -185,7 +185,7 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
     printf("1 - Editar nome do cliente\n");
     printf("2 - Editar email do cliente\n");
     printf("3 - Editar tatuagens do cliente\n");
-     op = leropcao();
+     op = lerOpcao();
     if(op == -1) {
         printf("Permitido apenas numeros\n");
         while (getchar() != '\n');
@@ -198,12 +198,12 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
             do
             {
                 printf("Digite o novo nome do cliente: \n");
-                scanf(" %[^\n]", Cedit[id].nome);
-            } while (!validaNome(Cedit[id].nome));
+                scanf(" %[^\n]", cEdit[id].nome);
+            } while (!validaNome(cEdit[id].nome));
 
             printf("Dado alterado!\n");
-            ordenaNome(Cedit, *qtdC);
-            escreverOrd(Cedit, *qtdC);
+            ordenaNome(cEdit, *qtdC);
+            escreverOrd(cEdit, *qtdC);
             break;
 
         case 2:
@@ -211,17 +211,17 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
             do
             {
                 printf("Digite o novo email do cliente: \n");
-                scanf(" %[^\n]", Cedit[id].email);
-            } while (!validaEmail(Cedit[id].email));
+                scanf(" %[^\n]", cEdit[id].email);
+            } while (!validaEmail(cEdit[id].email));
             printf("Dado alterado!\n");
-            escreverOrd(Cedit, *qtdC);
+            escreverOrd(cEdit, *qtdC);
             break;
 
         case 3:
 
             printf("1 - Adicionar uma tatuagem ao cliente.\n");
             printf("2 - Remover uma tatuagem do cliente.\n");
-            opb = leropcao();
+            opb = lerOpcao();
         if(opb == -1) {
             printf("Permitido apenas numeros\n");
             while (getchar() != '\n');
@@ -232,7 +232,7 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
 
                     if (opb == 1)
                     {
-                        imprimeDadosTatuagens(Tedit, *qtdT);
+                        imprimeDadosTatuagens(tEdit, *qtdT);
                         printf("Digite o ID da tatuagem que deseja inserir na lista do cliente: \n");
                         if ((scanf(" %d", &ida)) != 1)
                         {
@@ -247,11 +247,11 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
                             return;
                         }
 
-                        controle = verificaInsere(aux, ida, Cedit[id].nome);
+                        controle = verificaInsere(aux, ida, cEdit[id].nome);
 
                         if (controle != 1)
                         {
-                            Cedit[id].lista_de_tatuagens = carregaTatuagensNaLista(Cedit[id].lista_de_tatuagens, ida, Tedit, *qtdT);
+                            cEdit[id].lista_de_tatuagens = carregaTatuagensNaLista(cEdit[id].lista_de_tatuagens, ida, tEdit, *qtdT);
                         }
 
                         opb = 3;
@@ -259,14 +259,14 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
 
                     else if (opb == 2)
                     {
-                        if (verifica_vazio(Cedit[id].lista_de_tatuagens))
+                        if (verificaVazio(cEdit[id].lista_de_tatuagens))
                         {
                             printf("O cliente nao possui tatuagens!\n");
                             opb = 3;
                             return;
                         }
 
-                        lst_Imprime(Cedit[id].lista_de_tatuagens);
+                        lstImprime(cEdit[id].lista_de_tatuagens);
                         printf("Digite o ID da tatuagem que deseja remover: \n");
 
                         if ((scanf(" %d", &idb)) != 1)
@@ -275,7 +275,7 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
                             while (getchar() != '\n')
                                 ;
                         }
-                        removeTatuagemDaLista(&Cedit[id].lista_de_tatuagens, idb, aux, id, *qtdC, Cedit[id].nome);
+                        removeTatuagemDaLista(&cEdit[id].lista_de_tatuagens, idb, aux, id, *qtdC, cEdit[id].nome);
 
                         opb = 3;
                     }
@@ -295,17 +295,17 @@ void menuEdit(struct leitura *aux, int id, struct cliente *Cedit, Tatuagens *Ted
     
 }
 
-void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int Qtdc, int Qtdt)
+void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int qtdC, int qtdT)
 {
     int i, j, qtdl;
     char nome[200];
 
     FILE *arquivo;
     arquivo = fopen("../Dados/ListaTatuagens.txt", "r");
-    for (j = 0; j < Qtdc; j++)
+    for (j = 0; j < qtdC; j++)
     {
         fscanf(arquivo, "%[^\t]\t%d\t", nome, &qtdl);
-        for (i = 0; i < Qtdc; i++)
+        for (i = 0; i < qtdC; i++)
         {
             if (strcmp(cliente[i].nome, nome) == 0)
             {
@@ -317,7 +317,7 @@ void coletarLista(struct cliente *cliente, Tatuagens *tattoo, int Qtdc, int Qtdt
                     int id;
                     if (fscanf(arquivo, "%d", &id) == 1)
                     {
-                        primeiro = carregaTatuagensNaLista(primeiro, id, tattoo, Qtdt);
+                        primeiro = carregaTatuagensNaLista(primeiro, id, tattoo, qtdT);
                     }
                     else
                     {
@@ -406,7 +406,7 @@ void buscaBinariaNome(struct cliente *clientes, int qtdClientes)
                 return;
             }
 
-            lst_Imprime(clientes[meio].lista_de_tatuagens);
+            lstImprime(clientes[meio].lista_de_tatuagens);
             printf("================================\n");
 
             encontrado = 1;
@@ -444,13 +444,13 @@ void listarClientesEsuasTattoos(struct cliente *cliente, int qtdC)
         else
         {
             printf("Tatuagens: \n");
-            lst_Imprime(cliente[i].lista_de_tatuagens);
+            lstImprime(cliente[i].lista_de_tatuagens);
             printf("-------------------------\n");
         }
     }
 }
 
-int leropcao() {
+int lerOpcao() {
     char opcao[10];
     int i;
     printf("Digite a opcao desejada: ");
