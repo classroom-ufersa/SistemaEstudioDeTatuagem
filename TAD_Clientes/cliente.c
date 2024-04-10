@@ -158,22 +158,6 @@ void removeCliente(struct leitura *aux, struct cliente *clientes, int *qtdClient
     (*qtdClientes)--;
     clientes[ind].lista_de_tatuagens == NULL;
 
-    FILE *arquivo;
-    arquivo = fopen("../Dados/DadosClientes.txt", "w");
-
-    if (arquivo == NULL)
-    {
-        printf("Problema na abertura do arquivo.\n");
-        return;
-    }
-
-    for (i = 0; i < *qtdClientes; i++)
-    {
-        fprintf(arquivo, "%s\t%s\n", clientes[i].nome, clientes[i].email);
-    }
-
-    fclose(arquivo);
-
     printf("!!!! O cliente foi deletado !!!!\n");
 }
 
