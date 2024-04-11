@@ -350,6 +350,11 @@ void listarClientesEsuasTattoos(struct cliente *cliente, int qtdC);
 ```
 -  Esta função percorre o array de estruturas cliente e imprime os detalhes de cada cliente, incluindo o nome, o email e a lista de tatuagens.
 
+### Função lerOpcao:
+```c 
+int lerOpcao();
+```
+- Escolhida para fazer o tratamento de todo menu e submenu para ler a opção do usuário e validar a entrada.
 
 ## Compilação 
 - Recomendamos:

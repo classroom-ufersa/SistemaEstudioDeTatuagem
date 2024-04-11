@@ -358,25 +358,45 @@ int validaEmail(char *email)
 
 int validaNome(char *nome)
 {
-    int i;
+    int i; 
+    int espacamento = 1; 
 
     for (i = 0; nome[i]; i++)
     {
-        if ((nome[i] < 'A' || nome[i] > 'Z') && (nome[i] < 'a' || nome[i] > 'z') && nome[i] != ' ')
+        if (!isalpha(nome[i]) && nome[i] != ' ')
         {
-            printf("O nome deve conter apenas letras.\n");
+            printf("O nome deve conter apenas letras.\n"); 
+            return 0; 
+        }
+
+        if (espacamento && !isupper(nome[i])) 
+        {
+            printf("A primeira letra do nome e sobrenome devem ser maiuscula.\n"); 
+            return 0; 
+        }
+
+        if (!espacamento && isupper(nome[i])) 
+        {
+            printf("Somente a primeira letra do nome e sobrenome devem ser maiuscula.\n");
             return 0;
+        }
+
+        if (nome[i] == ' ')
+        {
+            espacamento = 1;
+        }
+        else
+        {
+            espacamento = 0; 
         }
     }
 
-    if (nome[0] < 'A' || nome[0] > 'Z')
-    {
-        printf("A primeira letra do nome deve ser maiuscula.\n");
-        return 0;
-    }
-
     return 1;
+
+
 }
+
+
 void buscaBinariaNome(struct cliente *clientes, int qtdClientes)
 {
     char nomeDesejado[200];
