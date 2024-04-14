@@ -1,5 +1,3 @@
-#ifndef TATUAGEM_H 
-#define TATUAGEM_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -60,4 +58,3 @@ int verificaInsere(struct leitura *grava, int idT, char *nome);
 
 /* Função que remove a tatuagem do arquivo texto. */
 void removeTatuagemPorId(Tatuagens *tatuagens, int *qtdTatuagens, struct leitura *aux, int id, int qtdL);
-# endif
